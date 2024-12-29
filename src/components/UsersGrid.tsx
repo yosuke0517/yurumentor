@@ -5,16 +5,16 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { MapPin, Users, MessageCircle } from 'lucide-react';
 
-interface User {
+export type User = {
   id: string;
   name: string;
   age: number;
   gender: string;
   location: string;
   bio: string;
-  imageUrl?: string;
   preferredMode: 'online' | 'offline';
-}
+  imageUrl?: string;
+};
 
 interface UsersGridProps {
   users: User[];
