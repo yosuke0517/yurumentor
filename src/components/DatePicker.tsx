@@ -3,7 +3,6 @@
 import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
-import { useState } from 'react';
 import { ja } from 'date-fns/locale';
 
 type DatePickerProps = {
@@ -12,9 +11,7 @@ type DatePickerProps = {
   name?: string;
 };
 
-export function DatePicker({ name }: DatePickerProps) {
-  const [date, setDate] = useState<Date>();
-
+export function DatePicker({ value, onChange, name }: DatePickerProps) {
   return (
     <div className="grid w-full gap-2">
       <Input
@@ -22,13 +19,13 @@ export function DatePicker({ name }: DatePickerProps) {
         id={name}
         name={name}
         placeholder="生年月日を選択"
-        value={date ? format(date, 'yyyy/MM/dd', { locale: ja }) : ''}
+        value={value ? format(value, 'yyyy/MM/dd', { locale: ja }) : ''}
         readOnly
       />
       <Calendar
         mode="single"
-        selected={date}
-        onSelect={setDate}
+        selected={value}
+        onSelect={onChange}
         locale={ja}
         className="rounded-md border"
       />
