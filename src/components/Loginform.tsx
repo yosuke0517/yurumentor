@@ -13,6 +13,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { login } from '@/features/auth/action';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 type FormData = {
   email: string;
@@ -21,6 +22,7 @@ type FormData = {
 
 export function LoginForm() {
   const { toast } = useToast();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -31,7 +33,8 @@ export function LoginForm() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      await login(data);
+      const res = await login(data);
+      if (res) router.push('/consultations');
     } catch (error) {
       if (error instanceof Error) {
         toast({

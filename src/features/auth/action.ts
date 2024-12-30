@@ -29,6 +29,7 @@ export async function login(data: LoginData) {
             'ログインに失敗しました。しばらく経ってから再度お試しください'
           );
       }
+      return false;
     }
 
     // last_login_atを更新
@@ -41,9 +42,7 @@ export async function login(data: LoginData) {
         .update({ last_login_at: new Date().toISOString() })
         .eq('id', session.user.id);
     }
-
-    // エラーがない場合のみリダイレクト
-    return redirect('/');
+    return true;
   } catch (error) {
     // エラーオブジェクトの型を確認して適切に処理
     if (error instanceof Error) {
@@ -56,43 +55,59 @@ export async function login(data: LoginData) {
   }
 }
 
-export async function signup(formData: FormData) {
+type SignupData = {
+  email: string;
+  password: string;
+};
+
+export async function signup(data: SignupData) {
   const supabase = await createServerSupabase();
 
-  const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  };
-
-  // サインアップ処理
-  const { error: signUpError } = await supabase.auth.signUp(data);
-
-  if (signUpError) {
-    console.error('アカウント作成エラー:', signUpError);
-    throw signUpError;
-  }
-
-  // セッションの確認
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (session) {
-    // プロフィールの作成
-    const { error: profileError } = await supabase.from('profiles').insert({
-      username: data.email,
-      id: session.user.id, // user_idを明示的に設定
+  try {
+    const { error: signUpError } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
     });
 
-    if (profileError) {
-      console.error('プロフィール作成エラー:', profileError);
-      throw profileError;
+    if (signUpError) {
+      // エラーの種類に応じて適切なメッセージを返す
+      switch (signUpError.message) {
+        case 'User already registered':
+          throw new Error('このメールアドレスは既に登録されています');
+        case 'Password should be at least 6 characters':
+          throw new Error('パスワードは6文字以上で入力してください');
+        default:
+          throw new Error(
+            'アカウント作成に失敗しました。しばらく経ってから再度お試しください'
+          );
+      }
+      return false;
     }
 
-    // 認証が完了している場合は相談一覧へリダイレクト
-    redirect('/profiles');
-  } else {
-    // メール確認が必要な場合は確認ページへ
-    redirect('/auth/verify');
+    // セッションの確認
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (session) {
+      // プロフィールの作成
+      const { error: profileError } = await supabase.from('profiles').insert({
+        username: data.email,
+        id: session.user.id,
+      });
+
+      if (profileError) {
+        throw new Error('プロフィール作成に失敗しました');
+      }
+      return true;
+    }
+    return true;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error(
+      '予期せぬエラーが発生しました。しばらく経ってから再度お試しください'
+    );
   }
 }

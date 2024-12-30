@@ -12,6 +12,8 @@ import {
 } from '@/components/ui/card';
 import { useForm } from 'react-hook-form';
 import { signup } from '@/features/auth/action';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 type FormData = {
   email: string;
@@ -19,6 +21,8 @@ type FormData = {
 };
 
 export default function RegisterForm() {
+  const { toast } = useToast();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -29,13 +33,16 @@ export default function RegisterForm() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const formData = new FormData();
-      formData.append('email', data.email);
-      formData.append('password', data.password);
-
-      await signup(formData);
+      const res = await signup(data);
+      if (res) router.push('/profiles');
     } catch (error) {
-      console.error('サインアップに失敗しました', error);
+      if (error instanceof Error) {
+        toast({
+          variant: 'destructive',
+          title: 'エラー',
+          description: error.message,
+        });
+      }
     }
   };
 
