@@ -38,12 +38,10 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  console.log('ユーザー', user);
   if (!user && !request.nextUrl.pathname.startsWith('/auth')) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
     url.pathname = '/auth';
-    console.log('ログインページにリダイレクト');
     return NextResponse.redirect(url);
   }
 
