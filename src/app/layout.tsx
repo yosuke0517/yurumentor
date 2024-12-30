@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { Header } from '@/components/Header';
+import { createServerSupabase } from '@/lib/supabase/server';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -22,11 +24,16 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const supabase = await createServerSupabase();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
   return (
     <html lang="ja">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {user ? <Header user={user} /> : null}
         {children}
       </body>
     </html>

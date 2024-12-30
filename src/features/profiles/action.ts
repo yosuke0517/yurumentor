@@ -36,5 +36,5 @@ export async function updateProfile(data: ProfileFormValues) {
     return;
   }
 
-  redirect('/');
+  redirect('/consultations');
 }
