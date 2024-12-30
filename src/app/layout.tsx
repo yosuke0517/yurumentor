@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { createServerSupabase } from '@/lib/supabase/server';
+import { Toaster } from '@/components/ui/toaster';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -35,6 +36,7 @@ export default async function RootLayout({
       >
         {user ? <Header user={user} /> : null}
         {children}
+        <Toaster />
       </body>
     </html>
   );
