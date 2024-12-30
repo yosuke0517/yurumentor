@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
-export async function createClient() {
+export async function createServerSupabase() {
   const cookieStore = await cookies();
 
   return createServerClient(
@@ -18,6 +18,10 @@ export async function createClient() {
               cookieStore.set(name, value, options)
             );
           } catch {
+            // Server Componentからの呼び出し時にエラーが発生
+            // ミドルウェアでユーザーセッションの更新を行っているので（updateSession）
+            // このエラーは安全に無視できます
+            //
             // The `setAll` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.

@@ -1,5 +1,3 @@
-'use client';
-
 import { LoginForm } from './Loginform';
 import RegisterForm from './RegisterForm';
 import Link from 'next/link';

@@ -1,16 +1,10 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { createServerSupabase } from '@/lib/supabase/server';
 
 export async function GET() {
   try {
-    // Supabaseクライアントの初期化（非同期のcookies()を使用）
-    const cookieStore = await cookies();
-    const supabase = createRouteHandlerClient({
-      cookies: async () => cookieStore,
-    });
+    const supabase = await createServerSupabase();
 
-    // セッションの確認
     const {
       data: { session },
       error: sessionError,
