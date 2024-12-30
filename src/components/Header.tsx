@@ -53,6 +53,12 @@ export function Header({ user }: HeaderProps) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end">
+                <DropdownMenuItem className="flex flex-col items-start">
+                  <span className="font-medium">
+                    {user.user_metadata?.full_name ?? 'ユーザー'}
+                  </span>
+                  <span className="text-sm text-gray-500">{user.email}</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut}>
                   ログアウト
                 </DropdownMenuItem>
