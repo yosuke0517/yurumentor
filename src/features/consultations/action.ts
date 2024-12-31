@@ -1,6 +1,7 @@
 'use server';
 
 import { createServerSupabase } from '@/lib/supabase/server';
+import { Consultation } from './types';
 
 export type ConsultationFormData = {
   title: string;
@@ -58,4 +59,26 @@ export async function getConsultations() {
   }
 
   return consultations;
+}
+
+export async function getConsultationById(
+  id: string
+): Promise<Consultation | null> {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/consultations/${id}`;
+
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('相談の取得に失敗しました:', errorText);
+      return null;
+    }
+    const consultation = await response.json();
+
+    return consultation;
+  } catch (error) {
+    console.error('Error while fetching consultation:', error);
+    return null;
+  }
 }
