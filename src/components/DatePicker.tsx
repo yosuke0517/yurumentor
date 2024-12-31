@@ -1,9 +1,8 @@
 'use client';
 
-import { Calendar } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { format } from 'date-fns';
-import { ja } from 'date-fns/locale';
+// import { ja } from 'date-fns/locale';
 
 type DatePickerProps = {
   value?: Date;
@@ -15,13 +14,19 @@ export function DatePicker({ value, onChange, name }: DatePickerProps) {
   return (
     <div className="grid w-full gap-2">
       <Input
-        type="text"
+        type="date"
         id={name}
         name={name}
         placeholder="生年月日を選択"
-        value={value ? format(value, 'yyyy/MM/dd', { locale: ja }) : ''}
-        readOnly
+        value={value ? format(value, 'yyyy-MM-dd') : ''}
+        onChange={(e) => {
+          if (onChange) {
+            onChange(e.target.value ? new Date(e.target.value) : undefined);
+          }
+        }}
       />
+      {/* 一旦コメントアウト UX悪そうだったら復活 */}
+      {/* 
       <Calendar
         mode="single"
         selected={value}
@@ -29,6 +34,7 @@ export function DatePicker({ value, onChange, name }: DatePickerProps) {
         locale={ja}
         className="rounded-md border"
       />
+      */}
     </div>
   );
 }
