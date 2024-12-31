@@ -143,7 +143,6 @@ export function ProfileForm() {
               )}
             />
 
-            {/* birthdayが保存できてない */}
             <FormField
               control={form.control}
               name="birthdate"
