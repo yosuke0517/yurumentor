@@ -30,7 +30,7 @@ export function Header({ user }: HeaderProps) {
     <header className="border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" className="text-xl font-bold">
-          MyApp
+          ゆるメンター
         </Link>
 
         <nav>
