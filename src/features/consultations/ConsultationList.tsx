@@ -4,23 +4,8 @@ import { format, differenceInYears } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import { Calendar, MessageSquare } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
-type Creator = {
-  id: string;
-  display_name: string;
-  birthdate: string;
-  gender: string;
-  profile_image_url: string | null;
-};
-
-type Consultation = {
-  id: string;
-  title: string;
-  description: string;
-  consultation_date: string;
-  created_at: string;
-  creator: Creator;
-};
+import Link from 'next/link';
+import { Consultation } from './types';
 
 type Props = {
   consultations: Consultation[];
@@ -87,7 +72,9 @@ export function ConsultationList({ consultations }: Props) {
 
               <div className="space-y-2">
                 <h3 className="text-xl font-semibold tracking-tight text-foreground">
-                  {consultation.title}
+                  <Link href={`/consultations/${consultation.id}`}>
+                    {consultation.title}
+                  </Link>
                 </h3>
                 <div className="flex items-center text-sm text-muted-foreground">
                   <Calendar className="mr-2 h-4 w-4" />
