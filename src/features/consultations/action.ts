@@ -10,55 +10,53 @@ export type ConsultationFormData = {
 };
 
 export async function createConsultation(data: ConsultationFormData) {
-  const supabase = await createServerSupabase();
+  try {
+    const supabase = await createServerSupabase();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    if (!session) {
+      throw new Error('認証されていません');
+    }
 
-  if (!session) {
-    throw new Error('認証されていません');
+    const { error } = await supabase.from('consultations').insert({
+      title: data.title,
+      description: data.description,
+      consultation_date: data.consultationDate,
+      creator_id: session.user.id,
+    });
+
+    if (error) {
+      console.error('相談の作成に失敗しました:', error);
+      throw new Error('相談の作成に失敗しました');
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
   }
-
-  const { error } = await supabase.from('consultations').insert({
-    title: data.title,
-    description: data.description,
-    consultation_date: data.consultationDate,
-    creator_id: session.user.id,
-  });
-
-  if (error) {
-    throw new Error('相談の作成に失敗しました');
-  }
-
-  return true;
 }
 
-export async function getConsultations() {
-  const supabase = await createServerSupabase();
+export async function fetchAllConsultations() {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/consultations`;
 
-  const { data: consultations, error } = await supabase
-    .from('consultations')
-    .select(
-      `
-      *,
-      creator:profiles (
-        id,
-        display_name,
-        birthdate,
-        gender,
-        profile_image_url
-      )
-    `
-    )
-    .order('created_at', { ascending: false });
+  try {
+    const response = await fetch(url);
 
-  if (error) {
-    console.error(error);
-    throw new Error('相談の取得に失敗しました');
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('相談の取得に失敗しました:', errorText);
+      throw new Error('相談の取得に失敗しました');
+    }
+
+    const consultations = await response.json();
+    return consultations;
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    throw new Error('予期せぬエラーが発生しました');
   }
-
-  return consultations;
 }
 
 export async function getConsultationById(

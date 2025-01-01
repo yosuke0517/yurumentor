@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ConsultationList } from '@/features/consultations/ConsultationList';
-import { getConsultations } from '@/features/consultations/action';
+import { fetchAllConsultations } from '@/features/consultations/action';
 
 export default async function ConsultationsPage() {
-  const consultations = await getConsultations();
+  const consultations = await fetchAllConsultations();
 
   return (
     <div className="container mx-auto p-4">
