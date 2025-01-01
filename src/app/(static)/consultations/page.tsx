@@ -9,7 +9,7 @@ export default async function ConsultationsPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center gap-3">
         <Link href="/consultations/new">
           <ActionButton
             label="相談を作成する"
@@ -17,6 +17,9 @@ export default async function ConsultationsPage() {
               <PlusCircle className="h-5 w-5 transition-transform duration-300 group-hover:rotate-90" />
             }
           />
+        </Link>
+        <Link href="/matches">
+          <ActionButton label="マッチしたユーザ一覧" buttonType="secondary" />
         </Link>
       </div>
       <ConsultationList consultations={consultations} />
