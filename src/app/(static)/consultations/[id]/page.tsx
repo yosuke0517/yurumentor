@@ -1,7 +1,8 @@
-import { Button } from '@/components/ui/button';
 import { getConsultationById } from '@/features/consultations/action'; // 相談を取得する関数をインポート
 import BackButton from '@/features/consultations/components/BackButton';
 import { notFound } from 'next/navigation';
+import MatchButton from '@/features/consultations/components/MatchButton';
+import { createServerSupabase } from '@/lib/supabase/server';
 
 type Props = {
   params: Promise<{ id: string }>; // paramsをPromiseとして定義
@@ -9,12 +10,16 @@ type Props = {
 
 export default async function ConsultationDetailPage({ params }: Props) {
   const { id } = await params;
-  console.log('Consultation ID:', id);
+  const supabase = await createServerSupabase();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const consultation = await getConsultationById(id);
 
   if (!consultation) {
-    notFound(); // 相談が見つからない場合は404ページを表示
+    notFound();
   }
 
   return (
@@ -24,7 +29,11 @@ export default async function ConsultationDetailPage({ params }: Props) {
       <p className="mt-2 text-sm text-muted-foreground">
         {consultation.description}
       </p>
-      <Button className="mt-4">相談に乗る</Button>
+      <MatchButton
+        consultationId={id}
+        createdId={consultation.creator_id}
+        currentUserId={user?.id}
+      />
     </div>
   );
 }

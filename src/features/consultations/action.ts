@@ -1,7 +1,7 @@
 'use server';
 
 import { createServerSupabase } from '@/lib/supabase/server';
-import { Consultation } from './types';
+import { ConsultationDetail } from './types';
 
 export type ConsultationFormData = {
   title: string;
@@ -61,7 +61,7 @@ export async function fetchAllConsultations() {
 
 export async function getConsultationById(
   id: string
-): Promise<Consultation | null> {
+): Promise<ConsultationDetail | null> {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/consultations/${id}`;
 
   try {
@@ -79,4 +79,32 @@ export async function getConsultationById(
     console.error('Error while fetching consultation:', error);
     return null;
   }
+}
+
+export async function createMatch(consultationId: string) {
+  const supabase = await createServerSupabase();
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    throw new Error('認証されていません');
+  }
+
+  const { error } = await supabase.from('matches').insert([
+    {
+      request_id: consultationId,
+      participant_id: user.id,
+      status: 'pending',
+    },
+  ]);
+
+  if (error) {
+    console.error('マッチング登録エラー:', error);
+    throw new Error('マッチングの登録に失敗しました');
+  }
+
+  return true;
 }
