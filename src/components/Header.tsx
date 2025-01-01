@@ -17,10 +17,10 @@ import { Heart } from 'lucide-react';
 
 type HeaderProps = {
   user: User | null;
-  matchCount?: number;
+  unReadMatchCount?: number;
 };
 
-export function Header({ user, matchCount = 0 }: HeaderProps) {
+export function Header({ user, unReadMatchCount = 0 }: HeaderProps) {
   const router = useRouter();
   const supabase = createClientComponentClient();
 
@@ -29,7 +29,8 @@ export function Header({ user, matchCount = 0 }: HeaderProps) {
     router.refresh();
   };
 
-  const displayCount = matchCount > 99 ? '99+' : matchCount.toString();
+  const displayCount =
+    unReadMatchCount > 99 ? '99+' : unReadMatchCount.toString();
 
   return (
     <header className="relative border-b bg-gradient-to-r from-white via-orange-50/30 to-pink-50/30">
@@ -44,8 +45,8 @@ export function Header({ user, matchCount = 0 }: HeaderProps) {
         <nav className="flex items-center space-x-4">
           {user && (
             <Link href="/matches" className="relative p-2">
-              <Heart className="h-6 w-6 fill-pink-500 text-pink-500 transition-colors hover:fill-pink-400 hover:text-pink-400" />
-              {matchCount > 0 && (
+              <Heart className="h-6 w-6 fill-rose-400 text-rose-400 transition-all duration-300 group-hover:scale-110 group-hover:fill-rose-300 group-hover:text-rose-300" />
+              {unReadMatchCount > 0 && (
                 <Badge variant="counter">{displayCount}</Badge>
               )}
             </Link>
