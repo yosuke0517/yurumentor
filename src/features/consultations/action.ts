@@ -9,7 +9,7 @@ export type ConsultationFormData = {
   consultationDate: Date;
 };
 
-export async function createConsultation(data: ConsultationFormData) {
+export async function createConsultationAction(data: ConsultationFormData) {
   try {
     const supabase = await createServerSupabase();
     const {
@@ -39,6 +39,7 @@ export async function createConsultation(data: ConsultationFormData) {
   }
 }
 
+// TODO servicesに移動させる
 export async function fetchAllConsultations() {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/consultations`;
 
@@ -59,6 +60,7 @@ export async function fetchAllConsultations() {
   }
 }
 
+// TODO servicesに移動させる
 export async function getConsultationById(
   id: string
 ): Promise<ConsultationDetail | null> {
@@ -107,4 +109,25 @@ export async function createMatch(consultationId: string) {
   }
 
   return true;
+}
+
+export async function getMatchesByConsultationId(consultationId: string) {
+  const supabase = await createServerSupabase();
+
+  try {
+    const { data, error } = await supabase
+      .from('matches')
+      .select('*')
+      .eq('request_id', consultationId);
+
+    if (error) {
+      console.error('マッチングの取得に失敗しました:', error);
+      throw new Error('マッチングの取得に失敗しました');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    throw new Error('予期せぬエラーが発生しました');
+  }
 }

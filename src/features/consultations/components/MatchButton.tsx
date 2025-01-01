@@ -3,21 +3,24 @@
 import { Button } from '@/components/ui/button';
 import { createMatch } from '@/features/consultations/action';
 import { useToast } from '@/hooks/use-toast';
-import { useTransition } from 'react';
+import { useState, useTransition } from 'react';
 
 type Props = {
   consultationId: string;
   createdId: string;
   currentUserId?: string;
+  isSent: boolean;
 };
 
 export default function MatchButton({
   consultationId,
   createdId,
   currentUserId,
+  isSent: initialIsSent,
 }: Props) {
   const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
+  const [isSent, setIsSent] = useState(initialIsSent);
 
   if (currentUserId === createdId) {
     return null;
@@ -33,6 +36,7 @@ export default function MatchButton({
       try {
         const res = await createMatch(consultationId);
         if (res) {
+          setIsSent(true);
           toast({
             title: '成功',
             description: '相談に乗る申請を送りました',
@@ -50,8 +54,12 @@ export default function MatchButton({
   };
 
   return (
-    <Button className="mt-4" onClick={handleMatch} disabled={isPending}>
-      {isPending ? '送信中...' : '相談に乗る'}
+    <Button
+      className={`mt-4 ${isSent ? 'cursor-not-allowed opacity-50' : ''}`}
+      onClick={handleMatch}
+      disabled={isSent || isPending}
+    >
+      {isPending ? '送信中...' : isSent ? '申請済み' : '相談に乗る'}
     </Button>
   );
 }

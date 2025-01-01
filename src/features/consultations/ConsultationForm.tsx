@@ -14,7 +14,7 @@ import {
   CardContent,
   CardFooter,
 } from '@/components/ui/card';
-import { ConsultationFormData, createConsultation } from './action';
+import { ConsultationFormData, createConsultationAction } from './action';
 import {
   FormField,
   FormItem,
@@ -39,7 +39,7 @@ export function ConsultationForm() {
 
   const onSubmit = async (data: ConsultationFormData) => {
     try {
-      await createConsultation(data);
+      await createConsultationAction(data);
       toast({
         title: '成功',
         description: '相談を作成しました',

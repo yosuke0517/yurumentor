@@ -1,4 +1,7 @@
-import { getConsultationById } from '@/features/consultations/action'; // 相談を取得する関数をインポート
+import {
+  getConsultationById,
+  getMatchesByConsultationId,
+} from '@/features/consultations/action'; // 相談を取得する関数をインポート
 import BackButton from '@/features/consultations/components/BackButton';
 import { notFound } from 'next/navigation';
 import MatchButton from '@/features/consultations/components/MatchButton';
@@ -17,7 +20,7 @@ export default async function ConsultationDetailPage({ params }: Props) {
   } = await supabase.auth.getUser();
 
   const consultation = await getConsultationById(id);
-
+  const matches = await getMatchesByConsultationId(id);
   if (!consultation) {
     notFound();
   }
@@ -33,6 +36,7 @@ export default async function ConsultationDetailPage({ params }: Props) {
         consultationId={id}
         createdId={consultation.creator_id}
         currentUserId={user?.id}
+        isSent={matches.some((match) => match.participant_id === user?.id)}
       />
     </div>
   );

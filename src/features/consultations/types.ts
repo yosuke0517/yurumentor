@@ -32,3 +32,14 @@ export type ConsultationDetail = {
     profile_image_url: string | null; // URL of the creator's profile image
   };
 };
+
+export type Match = {
+  id: string;
+  request_id: string;
+  participant_id: string;
+  status: 'pending' | 'approved' | 'rejected' | 'done' | 'invited';
+  created_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+  deleted_at?: string | null;
+};
