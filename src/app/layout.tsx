@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Geist, Geist_Mono, M_PLUS_Rounded_1c } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/Header';
 import { createServerSupabase } from '@/lib/supabase/server';
@@ -13,6 +13,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
+});
+
+const mPlus = M_PLUS_Rounded_1c({
+  weight: ['700'],
+  subsets: ['latin'],
+  variable: '--font-mplus',
 });
 
 export const metadata: Metadata = {
@@ -32,11 +38,14 @@ export default async function RootLayout({
   return (
     <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${mPlus.variable} min-h-screen bg-gradient-to-r from-white via-orange-50/30 to-pink-50/30 antialiased`}
       >
-        {user ? <Header user={user} /> : null}
-        {children}
-        <Toaster />
+        <div className="bg-grid-orange/[0.03] pointer-events-none fixed inset-0 bg-[size:20px_20px]" />
+        <div className="relative">
+          {user ? <Header user={user} /> : null}
+          {children}
+          <Toaster />
+        </div>
       </body>
     </html>
   );

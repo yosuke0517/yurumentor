@@ -18,6 +18,7 @@ const badgeVariants = cva(
           'border-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white shadow-md hover:shadow-lg',
         consultation:
           'border-transparent bg-gradient-to-r from-consultation-badge-from via-consultation-badge-via to-consultation-badge-to text-white shadow-md transition-all duration-300 group-hover:shadow-lg',
+        counter: 'absolute -right-2 -top-2 border-none bg-pink-500 text-white',
       },
     },
     defaultVariants: {

@@ -12,13 +12,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Heart } from 'lucide-react';
 
 type HeaderProps = {
   user: User | null;
+  matchCount?: number;
 };
 
-export function Header({ user }: HeaderProps) {
+export function Header({ user, matchCount = 0 }: HeaderProps) {
   const router = useRouter();
   const supabase = createClientComponentClient();
 
@@ -27,19 +29,28 @@ export function Header({ user }: HeaderProps) {
     router.refresh();
   };
 
+  const displayCount = matchCount > 99 ? '99+' : matchCount.toString();
+
   return (
     <header className="relative border-b bg-gradient-to-r from-white via-orange-50/30 to-pink-50/30">
       <div className="bg-grid-orange/[0.03] absolute inset-0 bg-[size:20px_20px]" />
       <div className="container relative mx-auto flex h-16 items-center justify-between px-4">
-        <Link
-          href="/"
-          className="flex items-center space-x-2 text-xl font-bold text-orange-950 transition-colors hover:text-orange-600"
-        >
-          <Heart className="h-6 w-6 text-orange-500" />
-          <span>ゆるメンター</span>
+        <Link href="/" className="flex items-center space-x-2">
+          <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-rose-400 bg-clip-text font-mplus text-xl font-bold text-transparent transition-all duration-300 hover:from-orange-500 hover:via-pink-600 hover:to-rose-500">
+            ゆるメンター
+          </span>
         </Link>
 
         <nav className="flex items-center space-x-4">
+          {user && (
+            <Link href="/matches" className="relative p-2">
+              <Heart className="h-6 w-6 fill-pink-500 text-pink-500 transition-colors hover:fill-pink-400 hover:text-pink-400" />
+              {matchCount > 0 && (
+                <Badge variant="counter">{displayCount}</Badge>
+              )}
+            </Link>
+          )}
+
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
