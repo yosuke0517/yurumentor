@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { getConsultationById } from '@/features/consultations/action'; // 相談を取得する関数をインポート
+import BackButton from '@/features/consultations/components/BackButton';
 import { notFound } from 'next/navigation';
 
 type Props = {
@@ -18,6 +19,7 @@ export default async function ConsultationDetailPage({ params }: Props) {
 
   return (
     <div className="container mx-auto p-4">
+      <BackButton />
       <h1 className="text-2xl font-bold">{consultation.title}</h1>
       <p className="mt-2 text-sm text-muted-foreground">
         {consultation.description}
