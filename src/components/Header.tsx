@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Heart } from 'lucide-react';
 
 type HeaderProps = {
   user: User | null;
@@ -27,46 +28,65 @@ export function Header({ user }: HeaderProps) {
   };
 
   return (
-    <header className="border-b">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="text-xl font-bold">
-          ゆるメンター
+    <header className="relative border-b bg-gradient-to-r from-white via-orange-50/30 to-pink-50/30">
+      <div className="bg-grid-orange/[0.03] absolute inset-0 bg-[size:20px_20px]" />
+      <div className="container relative mx-auto flex h-16 items-center justify-between px-4">
+        <Link
+          href="/"
+          className="flex items-center space-x-2 text-xl font-bold text-orange-950 transition-colors hover:text-orange-600"
+        >
+          <Heart className="h-6 w-6 text-orange-500" />
+          <span>ゆるメンター</span>
         </Link>
 
-        <nav>
+        <nav className="flex items-center space-x-4">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="relative h-8 w-8 rounded-full"
+                  className="relative h-8 w-8 rounded-full ring-2 ring-white/80 transition-all hover:ring-orange-200"
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarImage
                       src={user.user_metadata?.avatar_url ?? ''}
                       alt={user.user_metadata?.full_name ?? ''}
                     />
-                    <AvatarFallback>
+                    <AvatarFallback className="bg-gradient-to-br from-orange-50 to-pink-50 font-medium text-orange-600">
                       {user.user_metadata?.full_name?.[0] ?? 'U'}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end">
-                <DropdownMenuItem className="flex flex-col items-start">
-                  <span className="font-medium">
+              <DropdownMenuContent
+                className="w-56 animate-in fade-in-0 zoom-in-95"
+                align="end"
+              >
+                <DropdownMenuItem className="flex flex-col items-start p-3">
+                  <span className="font-medium text-orange-950">
                     {user.user_metadata?.full_name ?? 'ユーザー'}
                   </span>
-                  <span className="text-sm text-gray-500">{user.email}</span>
+                  <span className="text-sm text-orange-600/60">
+                    {user.email}
+                  </span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleSignOut}>
+                <DropdownMenuItem
+                  onClick={handleSignOut}
+                  className="text-red-600 focus:bg-red-50 focus:text-red-600"
+                >
                   ログアウト
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button asChild variant="ghost">
-              <Link href="/login">ログイン</Link>
+            <Button
+              asChild
+              className="group relative overflow-hidden bg-gradient-to-r from-orange-400 to-pink-500 text-white shadow-md transition-all duration-300 hover:translate-y-[-1px] hover:shadow-lg"
+            >
+              <Link href="/login">
+                <span className="relative z-10">ログイン</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-pink-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              </Link>
             </Button>
           )}
         </nav>

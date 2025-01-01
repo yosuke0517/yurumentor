@@ -1,9 +1,10 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { createMatch } from '@/features/consultations/action';
 import { useToast } from '@/hooks/use-toast';
 import { useState, useTransition } from 'react';
+import ActionButton from '@/components/ActionButton';
+import { PlusCircle } from 'lucide-react';
 
 type Props = {
   consultationId: string;
@@ -54,12 +55,11 @@ export default function MatchButton({
   };
 
   return (
-    <Button
-      className={`mt-4 ${isSent ? 'cursor-not-allowed opacity-50' : ''}`}
+    <ActionButton
       onClick={handleMatch}
-      disabled={isSent || isPending}
-    >
-      {isPending ? '送信中...' : isSent ? '申請済み' : '相談に乗る'}
-    </Button>
+      label={isPending ? '送信中...' : isSent ? '申請済み' : '相談に乗る'}
+      icon={isSent ? null : <PlusCircle className="h-5 w-5" />}
+      disabled={isPending || isSent}
+    />
   );
 }
