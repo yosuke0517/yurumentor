@@ -36,7 +36,7 @@ export function Header({ user, unReadMatchCount = 0 }: HeaderProps) {
     <header className="relative border-b bg-gradient-to-r from-white via-orange-50/30 to-pink-50/30">
       <div className="bg-grid-orange/[0.03] absolute inset-0 bg-[size:20px_20px]" />
       <div className="container relative mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href="/consultations" className="flex items-center space-x-2">
           <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-rose-400 bg-clip-text font-mplus text-xl font-bold text-transparent transition-all duration-300 hover:from-orange-500 hover:via-pink-600 hover:to-rose-500">
             ゆるメンター
           </span>
@@ -76,7 +76,7 @@ export function Header({ user, unReadMatchCount = 0 }: HeaderProps) {
               >
                 <DropdownMenuItem className="flex flex-col items-start p-3">
                   <span className="font-medium text-orange-950">
-                    {user.user_metadata?.full_name ?? 'ユーザー'}
+                    {user.user_metadata?.full_name ?? ''}
                   </span>
                   <span className="text-sm text-orange-600/60">
                     {user.email}
