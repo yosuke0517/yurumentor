@@ -13,7 +13,6 @@ export async function MatchedUserList() {
   }
 
   const matchedUsers = await fetchMatchedUsers(user.id);
-  console.log(matchedUsers);
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-6 bg-gradient-to-r from-pink-400 to-orange-400 bg-clip-text text-2xl font-bold tracking-tight text-transparent">

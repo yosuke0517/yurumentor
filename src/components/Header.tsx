@@ -23,7 +23,6 @@ type HeaderProps = {
 export function Header({ user, unReadMatchCount = 0 }: HeaderProps) {
   const router = useRouter();
   const supabase = createClientComponentClient();
-  console.log(user);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
