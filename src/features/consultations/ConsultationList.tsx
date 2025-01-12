@@ -1,5 +1,3 @@
-'use client';
-
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { format, differenceInYears } from 'date-fns';
@@ -93,7 +91,7 @@ export function ConsultationList({ consultations }: Props) {
                 </div>
               </div>
             </CardContent>
-            <div className="from-consultation-overlay-from/5 via-consultation-overlay-via/5 to-consultation-overlay-to/5 absolute inset-0 bg-gradient-to-r opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-gradient-to-r from-consultation-overlay-from/5 via-consultation-overlay-via/5 to-consultation-overlay-to/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </Card>
         </Link>
       ))}
